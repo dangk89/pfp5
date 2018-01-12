@@ -6,13 +6,9 @@ f	pageRank 	- Several iterations of internal pagerank algorithm
 f 	maxIndex 	- Index of max rank
 
 
-
-
 Load.hs + Count.hs
 f	loadPages	- Load whole page graph into memory, Returns IO (from, to, n_links for each page)
 f 	countPages 	- Get max pagenumber of file, count number of lines
-
-
 
 
 Page.hs	- Kun parsing og type deklarationer. Det meste kan vi undlade i vores implementering, da vi bruger python
@@ -25,13 +21,11 @@ f 	parsePage 	- Parse whole line of links file. Returns mlinks from line.
 f 	char		- Parse a single char
 f 	pageIds 	- Parse vector of pageIds
 
-
-
-
-
-
-
-
+Step.hs
+:t 	PageGraph	- Vector Link
+:t 	Update 		- (PageId, Rank)
+f 	stepRank 	- Perform one iteration step for the internal Page Rank algorithm.
+f 	contribution- For every link supplied, calculate it's contribution to the page it points to. Returns Acc (Vector Float)
 
 
 
