@@ -1,0 +1,49 @@
+Rank.hs
+f	arrayize	- Take S.vector, returns A.vector
+f	rank 		- Load links graph, feed to Acc in chunks to not run out of memory (pythonize this!)
+f	initialRanks- Construct initial vector
+f	pageRank 	- Several iterations of internal pagerank algorithm
+f 	maxIndex 	- Index of max rank
+
+
+
+
+Load.hs + Count.hs
+f	loadPages	- Load whole page graph into memory, Returns IO (from, to, n_links for each page)
+f 	countPages 	- Get max pagenumber of file, count number of lines
+
+
+
+
+Page.hs	- Kun parsing og type deklarationer. Det meste kan vi undlade i vores implementering, da vi bruger python
+:t 	PageId		- Word32
+:t 	Link 		- (PageId,PageId)
+:t  Rank 		- Float
+:d 	Mlinks		- {ml_ix, ml_size, ml_from, ml_to, ml_sizes} - Mutable links
+f 	parsePageId - Parse just PageID from line. Takes line, returns pageid (1st element)
+f 	parsePage 	- Parse whole line of links file. Returns mlinks from line.
+f 	char		- Parse a single char
+f 	pageIds 	- Parse vector of pageIds
+
+
+
+
+
+
+
+
+
+
+
+
+Er vores approach acceptabel? (naiv + optimeret)
+- Yes
+
+Ideer til optimeret approach?
+- Næh
+
+Evt. faldgruber i forbindelse med oversættelsen og optimeringen?
+- Manglende benchmark i accelerate eksemplet, men det skulle vi ikke forholde os til
+
+Chunking og memory stadig nødvendig at tage i betragtning?
+- Yes	
