@@ -5,11 +5,10 @@ f	initialRanks- Construct initial vector
 f	pageRank 	- Several iterations of internal pagerank algorithm
 f 	maxIndex 	- Index of max rank
 
-
 Load.hs + Count.hs
 f	loadPages	- Load whole page graph into memory, Returns IO (from, to, n_links for each page)
 f 	countPages 	- Get max pagenumber of file, count number of lines
-
+? 	ixline		- ???
 
 Page.hs	- Kun parsing og type deklarationer. Det meste kan vi undlade i vores implementering, da vi bruger python
 :t 	PageId		- Word32
@@ -27,7 +26,9 @@ Step.hs
 f 	stepRank 	- Perform one iteration step for the internal Page Rank algorithm.
 f 	contribution- For every link supplied, calculate it's contribution to the page it points to. Returns Acc (Vector Float)
 
-
+Progress.hs 	- Mainly prints progress information, not much else
+f 	printPos 	- Print position in a stream, without a maximum value. input = isLast header block pos
+f 	printProg.. - Print progress in a stream towards a maximum value. input = header block pos len
 
 
 Er vores approach acceptabel? (naiv + optimeret)
