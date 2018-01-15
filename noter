@@ -30,6 +30,15 @@ Progress.hs 	- Mainly prints progress information, not much else
 f 	printPos 	- Print position in a stream, without a maximum value. input = isLast header block pos
 f 	printProg.. - Print progress in a stream towards a maximum value. input = header block pos len
 
+--
+
+To do:
+	Load.hs:
+	- From To?
+	- Mlinks? Mutable links, contains: {ml_ix, ml_size, ml_from, ml_to, ml_sizes}
+	- 10000 ixLine?
+
+
 
 Er vores approach acceptabel? (naiv + optimeret)
 - Yes
@@ -41,4 +50,4 @@ Evt. faldgruber i forbindelse med oversættelsen og optimeringen?
 - Manglende benchmark i accelerate eksemplet, men det skulle vi ikke forholde os til
 
 Chunking og memory stadig nødvendig at tage i betragtning?
-- Yes	
+- Yes
