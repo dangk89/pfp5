@@ -22,15 +22,16 @@ let rank_page [n] (links:[]link) (ranks: [n]f32) (sizes:[n]i32) : []f32 =
   let new_ranks = map get_contributions (iota n)
   in map (\idx -> ranks[idx] + new_ranks[idx]) (iota n)
     
-let rank [n] (links:[]link) (ranks: [n]f32) (sizes:[n]i32) : []f32 = 
-  let ranks = rank_page links ranks sizes
-  let ranks_dangle = rank_dangle ranks sizes
-  in map (\i -> ranks[i] + ranks_dangle[i]) (iota n)
+let rank [n] (links:[]link) (ranks_in: [n]f32) (sizes:[n]i32) (iterations:i32) : []f32 = 
+  loop ranks_next = ranks_in for i < iterations do
+    let ranks_pages = rank_page links ranks_next sizes
+    let ranks_dangle = rank_dangle ranks_pages sizes
+    in map (\i -> ranks_next[i] + ranks_dangle[i]) (iota n)
 
 let main (from:[]i32, to:[]i32, sizes:[]i32): []f32 =
   let n_links = length from
   let n_pages = length sizes
   let links = map (\idx -> (from[idx], to[idx])) (iota n_links)
-  let ranks_initial = map (\_ -> 0.85f32) (iota n_pages)
-  in rank links ranks_initial sizes
+  let ranks_initial = map (\_ -> 1f32 / (f32.i32 n_pages)) (iota n_pages)
+  in rank links ranks_initial sizes 10
 
