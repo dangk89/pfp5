@@ -1,57 +1,59 @@
 import json
 import numpy as np 
+import os
+import sys
 
-def parse(file):
-	pages = [[int(num) for num in e.replace(':','').split(' ') if num] for e in file]
-	frmTo 		= [(e[0],out) for e in pages for out in e[1:]]
-	frm,to,deg 	= [e[0] for e in frmTo],[e[1] for e in frmTo],[len(e)-1 for e in pages]
+#Clear outfiles
+for file in os.listdir('data/frmtodeg'):
+	os.remove('data/frmtodeg/'+file)
 
-	with open('data/from.txt', 'a') as outfile:
-		json.dump(frm, outfile)
-	with open('data/to.txt', 'a') as outfile:
-		json.dump(to, outfile)
-	with open('data/deg.txt', 'a') as outfile:
-		json.dump(deg, outfile)
+# Initial configs
+n_line = 0
+n_chunk = 0
+n_links = 0
+bufsize = 1000000
 
-bigfile = open('data/links-simple-sorted.txt','r')
-tmp_lines = bigfile.readlines(10)
-for i in range(2):
-	parse(tmp_lines)
-    	tmp_lines = bigfile.readlines(10)
+# Create output files
+path = 'data/frmtodeg/'
+fromfile = open(path+'/from'+str(n_chunk)+'.txt','a')
+tofile = open(path+'/to'+str(n_chunk)+'.txt','a')
+infile = open('data/links-simple-sorted.txt') 
+frmv = []
+tov = []
+degv = []
+for line in infile:
+		line = [int(num) for num in line.replace(':','').split(' ') if num]
+		frmTo = [(line[0],out) for out in line[1:]]
+		frm,to,deg = [e[0] for e in frmTo],[e[1] for e in frmTo],len(line[1:])
+		degv.append(deg)
 
+		if n_line%100000 == 0:
+			print(n_line)
+		n_line+=1
 
-"""# METHOD 1
-with open('data/links-simple-sorted.txt') as infile:
-	lines = []
-	for each in range(0,5000000):
-		line = infile.readline()
-		page = [int(num) for num in line.replace(':','').split(' ') if num]
-		frm,to,deg= page[0],page[1:],len(page)-1
-		with open('data/from.txt', 'w') as outfile:
-			json.dump(frm, outfile)
-		with open('data/to.txt', 'w') as outfile:
-			json.dump(to, outfile)
-		with open('data/deg.txt', 'w') as outfile:
-			json.dump(deg, outfile)"""
+		for idx,e in enumerate(frm):
+			frmv.append(e)
+			tov.append(to[idx])
+			n_links+=1
+			if n_links%bufsize == 0:
+				fromfile.write('['+','.join([str(e) for e in frmv])+']')
+				tofile.write('['+','.join([str(e) for e in tov])+']')
 
+				n_chunk+=1
+				fromfile = open(path+'/from'+str(n_chunk)+'.txt','a')
+				tofile = open(path+'/to'+str(n_chunk)+'.txt','a')
+				frmv = []
+				tov = []
 
-# METHOD 2
-#with open('data/links-simple-sorted.txt') as infile:
-#	pages = [[int(num) for num in e.replace(':','').split(' ') if num] for e in infile.read().split('\n')]
+		#if n_line>10:
+		#	break
 
-#print(len(pages))
-
-"""
-fromTo 		= [(e[0],out) for e in pages for out in e[1:]]
-frm,To,Deg 	= [e[0] for e in fromTo],[e[1] for e in fromTo],[len(e)-1 for e in pages]
-
-with open('output.txt', 'w') as outfile:
-    json.dump(frm, outfile)
-    outfile.write('\n')
-    json.dump(To, outfile)
-    outfile.write('\n')
-    json.dump(Deg, outfile)
-"""
-
-
-# 5706071 lineszz
+fromfile.write('['+','.join([str(e) for e in frmv])+']')
+tofile.write('['+','.join([str(e) for e in tov])+']')
+n_chunk+=1
+fromfile = open(path+'/from'+str(n_chunk)+'.txt','a')
+tofile = open(path+'/to'+str(n_chunk)+'.txt','a')
+degfile = open(path+'/'+str(n_chunk)+'.txt','a')
+degfile.write('['+','.join([str(e) for e in degv])+']')
+frmv = []
+tov = []
