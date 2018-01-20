@@ -17,7 +17,8 @@ bufsize = 1000000
 path = 'data/frmtodeg/'
 fromfile = open(path+'/from'+str(n_chunk)+'.txt','a')
 tofile = open(path+'/to'+str(n_chunk)+'.txt','a')
-infile = open('data/links-simple-sorted.txt') 
+degfile = open(path+'/deg'+str(n_chunk)+'.txt','a')
+infile = open('data/links-simple-sorted.txt')
 frmv = []
 tov = []
 degv = []
@@ -25,7 +26,6 @@ for line in infile:
 		line = [int(num) for num in line.replace(':','').split(' ') if num]
 		frmTo = [(line[0],out) for out in line[1:]]
 		frm,to,deg = [e[0] for e in frmTo],[e[1] for e in frmTo],len(line[1:])
-		degv.append(deg)
 
 		if n_line%100000 == 0:
 			print(n_line)
@@ -34,26 +34,31 @@ for line in infile:
 		for idx,e in enumerate(frm):
 			frmv.append(e)
 			tov.append(to[idx])
+			degv.append(deg)
+
 			n_links+=1
 			if n_links%bufsize == 0:
 				fromfile.write('['+','.join([str(e) for e in frmv])+']')
 				tofile.write('['+','.join([str(e) for e in tov])+']')
-
+				degfile.write('['+','.join([str(e) for e in degv])+']')
 				n_chunk+=1
 				fromfile = open(path+'/from'+str(n_chunk)+'.txt','a')
 				tofile = open(path+'/to'+str(n_chunk)+'.txt','a')
 				frmv = []
 				tov = []
+				degv = []
 
-		#if n_line>10:
-		#	break
+		if n_line>10000:
+			break
 
 fromfile.write('['+','.join([str(e) for e in frmv])+']')
 tofile.write('['+','.join([str(e) for e in tov])+']')
-n_chunk+=1
-fromfile = open(path+'/from'+str(n_chunk)+'.txt','a')
-tofile = open(path+'/to'+str(n_chunk)+'.txt','a')
-degfile = open(path+'/'+str(n_chunk)+'.txt','a')
 degfile.write('['+','.join([str(e) for e in degv])+']')
-frmv = []
-tov = []
+
+n_chunk+=1
+#fromfile = open(path+'/from'+str(n_chunk)+'.txt','a')
+#tofile = open(path+'/to'+str(n_chunk)+'.txt','a')
+#degfile = open(path+'/deg'+str(n_chunk)+'.txt','a')
+
+#frmv = []
+#tov = []
