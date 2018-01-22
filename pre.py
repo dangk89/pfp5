@@ -11,7 +11,7 @@ for file in os.listdir('data/frmtodeg'):
 n_line = 0
 n_chunk = 0
 n_links = 0
-bufsize = 100000
+bufsize = 10**6
 
 # Create output files
 path = 'data/frmtodeg/'
@@ -37,8 +37,9 @@ for line in infile:
 	degrees_vector.append(length)
 
 	n_line += 1
-	if n_line%bufsize == 0:
-		print(n_line)
+	n_links += length
+	if bufsize * (n_chunk + 1) < n_links:
+		print("Writing {} links to file".format(n_links))
 		write_to_files()
 		# Increment chunk and reset vectors
 		n_chunk+=1
