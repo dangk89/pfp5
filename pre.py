@@ -32,6 +32,7 @@ for line in infile:
 	links = [(line[0], out) for out in line[1:]]
 	length = len(line[1:])
 	links_vector += links
+	degrees_vector.append(length)
 
 	n_line += 1
 	n_links += length
