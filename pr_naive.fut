@@ -27,10 +27,9 @@ let calculate_ranks [n] (links:[]link) (ranks_in: [n]f32) (sizes:[n]i32) (iterat
     let ranks_pages = calculate_page_ranks links ranks_next sizes
     in calculate_dangling_ranks ranks_pages sizes
 
-let main (from:[]i32, to:[]i32, sizes:[]i32): []f32 =
-  let n_links = length from
+let main (links:[]link, sizes:[]i32): []f32 =
+  let n_links = length links
   let n_pages = length sizes
-  let links = map (\idx -> (from[idx], to[idx])) (iota n_links)
   let ranks_initial = map (\_ -> 1f32 / (f32.i32 n_pages)) (iota n_pages)
   in calculate_ranks links ranks_initial sizes 10
 

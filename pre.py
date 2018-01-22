@@ -1,5 +1,5 @@
 import json
-import numpy as np 
+import numpy as np
 import os
 import sys
 
@@ -11,54 +11,39 @@ for file in os.listdir('data/frmtodeg'):
 n_line = 0
 n_chunk = 0
 n_links = 0
-bufsize = 1000000
+bufsize = 100000
 
 # Create output files
 path = 'data/frmtodeg/'
-fromfile = open(path+'/from'+str(n_chunk)+'.txt','a')
-tofile = open(path+'/to'+str(n_chunk)+'.txt','a')
-degfile = open(path+'/deg'+str(n_chunk)+'.txt','a')
 infile = open('data/links-simple-sorted.txt')
-frmv = []
-tov = []
-degv = []
+
+def links_file(n):
+    return open(path+'/link'+str(n)+'.txt','a')
+def degrees_file(n):
+    return open(path+'/deg'+str(n)+'.txt','a')
+
+links_vector = []
+degrees_vector = []
+
+def write_to_files():
+	links_file(n_chunk).write('['+','.join("({},{})".format(e[0], e[1]) for e in links_vector)+']')
+	degrees_file(n_chunk).write('['+','.join([str(e) for e in degrees_vector])+']')
+
 for line in infile:
-		line = [int(num) for num in line.replace(':','').split(' ') if num]
-		frmTo = [(line[0],out) for out in line[1:]]
-		frm,to,deg = [e[0] for e in frmTo],[e[1] for e in frmTo],len(line[1:])
+	line = [int(num) for num in line.replace(':','').split(' ') if num]
+	links = [(line[0], out) for out in line[1:]]
+	length = len(line[1:])
+	links_vector += links
+	degrees_vector.append(length)
 
-		if n_line%100000 == 0:
-			print(n_line)
-		n_line+=1
+	n_line += 1
+	if n_line%bufsize == 0:
+		print(n_line)
+		write_to_files()
+		# Increment chunk and reset vectors
+		n_chunk+=1
+		links_vector = []
+		degrees_vector = []
 
-		for idx,e in enumerate(frm):
-			frmv.append(e)
-			tov.append(to[idx])
-			degv.append(deg)
-
-			n_links+=1
-			if n_links%bufsize == 0:
-				fromfile.write('['+','.join([str(e) for e in frmv])+']')
-				tofile.write('['+','.join([str(e) for e in tov])+']')
-				degfile.write('['+','.join([str(e) for e in degv])+']')
-				n_chunk+=1
-				fromfile = open(path+'/from'+str(n_chunk)+'.txt','a')
-				tofile = open(path+'/to'+str(n_chunk)+'.txt','a')
-				frmv = []
-				tov = []
-				degv = []
-
-		if n_line>10000:
-			break
-
-fromfile.write('['+','.join([str(e) for e in frmv])+']')
-tofile.write('['+','.join([str(e) for e in tov])+']')
-degfile.write('['+','.join([str(e) for e in degv])+']')
-
-n_chunk+=1
-#fromfile = open(path+'/from'+str(n_chunk)+'.txt','a')
-#tofile = open(path+'/to'+str(n_chunk)+'.txt','a')
-#degfile = open(path+'/deg'+str(n_chunk)+'.txt','a')
-
-#frmv = []
-#tov = []
+# Write residual changes
+write_to_files()
