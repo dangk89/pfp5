@@ -33,6 +33,6 @@ let calculate_ranks [n] (links:[]link) (ranks_in: *[n]f64) (sizes:[n]i32) (itera
     let ranks_pages : *[]f64 = calculate_page_ranks links ranks sizes
     in calculate_dangling_ranks ranks_pages sizes
 
-let main (links_array:[][2]i32, sizes:[]i32, ranks_initial: *[]f64): []f64 =
+let main [n] (links_array:[][2]i32, sizes:[n]i32, ranks_initial: *[n]f64): []f64 =
   let links = map (\l -> (l[0], l[1])) links_array
   in calculate_ranks links ranks_initial sizes 10

@@ -19,12 +19,15 @@ infile = open('data/links-simple-sorted.txt')
 degrees_file = open(path+'/degrees.txt','a')
 links_file = open(path+'/link0.txt','a')
 
+# Write initial square bracket to degrees file
+degrees_file.write("[")
+
 links_vector = []
 degrees_vector = []
 
 def write_to_disk():
 	links_file.write('['+','.join("[{},{}]".format(e[0], e[1]) for e in links_vector)+']')
-	degrees_file.write('['+','.join([str(e) for e in degrees_vector])+']')
+	degrees_file.write(','.join([str(e) for e in degrees_vector]))
 
 for line in infile:
 	line = [int(num) for num in line.replace(':','').split(' ') if num]
@@ -45,5 +48,8 @@ for line in infile:
 
 # Write residual to files
 write_to_disk()
+
+# Append last square bracket to degrees file
+degrees_file.write("]")
 
 print("Wrote {} chunks with {} links and {} pages to disk".format(n_chunk, n_links, n_line))
