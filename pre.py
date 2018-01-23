@@ -11,7 +11,8 @@ for file in os.listdir('data/frmtodeg'):
 n_line = 0
 n_chunk = 0
 n_links = 0
-bufsize = 10**6
+bufsize = 10**6 
+print(bufsize)
 
 # Create output files
 path = 'data/frmtodeg/'
