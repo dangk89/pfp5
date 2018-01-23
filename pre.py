@@ -17,7 +17,7 @@ bufsize = 10**6
 path = 'data/frmtodeg/'
 infile = open('data/links-simple-sorted.txt')
 degrees_file = open(path+'/degrees.txt','a')
-links_file = open(path+'/links.txt','a')
+links_file = open(path+'/link0.txt','a')
 
 links_vector = []
 degrees_vector = []
@@ -39,6 +39,7 @@ for line in infile:
 		print("Writing {} links to disk".format(n_links))
 		write_to_disk()
 		n_chunk += 1
+		links_file = open(path+'/link'+str(n_chunk)+'.txt','a')
 		links_vector = []
 		degrees_vector = []
 
